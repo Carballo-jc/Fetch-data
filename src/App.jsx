@@ -1,12 +1,46 @@
-import './App.css'
+import React, { Suspense } from "react";
+import { useFetch } from "./useFetch";
+import { fetchData } from "./fetchData";
+import "./App.css";
+
+// useFetch hook version
+// function App() {
+//   const { data, loading, error, handleCancelRequest } = useFetch(
+//     "https://jsonplaceholder.typicode.com/todos"
+//   );
+
+//   return (
+//     <div className="App">
+//       <h1>Fetch like a Pro</h1>
+
+//       <button onClick={handleCancelRequest}>Cancel Request</button>
+//       <ul className="card">
+//         {error && <li>Error: {error}</li>}
+//         {loading && <li>Loading...</li>}
+//         {data?.map((item) => (
+//           <li key={item.id}>{item.title}</li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// }
+
+const apiData = fetchData("https://jsonplaceholder.typicode.com/todos");
 
 function App() {
+  const data = apiData.read();
 
   return (
     <div className="App">
-      <h2>Fetching de Datos</h2>
+      <h1>Fetching de Datos</h1>
+      <Suspense fallback={<div>Cargando...</div>}>
+        <ul>
+          {data?.map((item) => (
+            <li key={item.id}>{item.title}</li>
+          ))}
+        </ul>
+      </Suspense>
     </div>
-  )
+  );
 }
-
-export default App
+export default App;
